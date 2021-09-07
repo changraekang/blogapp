@@ -1,6 +1,6 @@
 package com.cos.blogapp.web;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;  
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,44 +11,18 @@ import com.cos.blogapp.domain.user.UserRepository;
 import com.cos.blogapp.web.dto.JoinReqDto;
 import com.cos.blogapp.web.dto.LoginReqDto;
 
+import lombok.RequiredArgsConstructor;
+@RequiredArgsConstructor
 @Controller
 public class UserController {
 	
-	private UserRepository userRepository;
-	private HttpSession session;
+	private final UserRepository userRepository;
+	private final HttpSession session;
 	
 	//DI
-	public UserController(UserRepository userRepository, HttpSession session) {
-		this.userRepository = userRepository;
-		this.session		= session;
-	}
-	@GetMapping("/test/query/join")
-	public void testQueryJoin() {
-		
-		userRepository.join("cos","1234","cos@nate.com");
-		
-		
-		
-	}
+
 	
-	
-	
-	@GetMapping("/test/join")
-	public void testJoin() {
-		User user = new User();
-		user.setUsername("kang");
-		user.setPassword("1234");
-		user.setEmail("kcr@gmail.com");
-		
-		// insert into user( username, password, email) values('kang','1234','kcr@gmail.com')
-		userRepository.save(user);
-		
-		
-		
-	}
-	
-	
-	@GetMapping("/home")
+	@GetMapping({"/","/home"})
 	public String home() {
 		return"home";
 	}
@@ -91,6 +65,16 @@ public class UserController {
 	@PostMapping("/join")
 	public String join(JoinReqDto dto) {
 		
+		if(dto.getUsername() ==  null ||
+		   dto.getPassword() ==  null ||
+		   dto.getEmail()	 ==  null ||
+		   !dto.getUsername().equals("")||
+		   !dto.getPassword().equals("")||
+		   !dto.getEmail().equals("")
+		   
+		) {
+		   return "error/error";
+		}
 		
 		userRepository.save(dto.toEntity());
 		return "redirect:/loginForm";
