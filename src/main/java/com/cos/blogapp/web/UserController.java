@@ -56,12 +56,8 @@ public class UserController {
 	@PostMapping("/login")
 	public String login(@Valid LoginReqDto dto, BindingResult bindingResult , Model model) {
 		
-		System.out.println(dto.getUsername());
-		System.out.println(dto.getPassword());
 		
-		User userEntitiy = userRepository.mLogin(dto.getUsername(), dto.getPassword()); 
-		
-		if(userEntitiy == null || bindingResult.hasErrors()) {
+		if(bindingResult.hasErrors()) {
 			Map<String, String> errorMap = new HashMap<>();
 			for(FieldError error : bindingResult.getFieldErrors()) {
 				errorMap.put(error.getField(), error.getDefaultMessage());
@@ -70,6 +66,19 @@ public class UserController {
 			}
 			model.addAttribute("errorMap",errorMap);
 			return "error/error";
+		}
+		
+		
+		System.out.println(dto.getUsername());
+		System.out.println(dto.getPassword());
+		
+		
+		
+		
+		User userEntitiy = userRepository.mLogin(dto.getUsername(), dto.getPassword()); 
+		
+		if(userEntitiy == null) {
+			return "redirect:/loginForm";
 		}else {
 			session.setAttribute("principal", userEntitiy);
 			return "redirect:/home";
