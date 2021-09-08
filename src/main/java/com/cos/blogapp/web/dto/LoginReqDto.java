@@ -15,8 +15,6 @@ import lombok.NoArgsConstructor;
 public class LoginReqDto {
 	
 	
-	@Size(min = 2,max = 20)
-	@NotBlank
 	private String username;
 	
 	@Size(min = 4,max = 20)
