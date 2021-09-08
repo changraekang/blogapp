@@ -56,7 +56,7 @@ public class UserController {
 	
 	
 	@PostMapping("/login")
-	public @ResponseBody String login(@Valid LoginReqDto dto, BindingResult bindingResult , Model model) {
+	public @ResponseBody String login(@Valid LoginReqDto dto, BindingResult bindingResult ) {
 		
 		
 		if(bindingResult.hasErrors()) {
@@ -66,7 +66,6 @@ public class UserController {
 				System.out.println("필드:" + error.getField());
 				System.out.println("메시지:" + error.getDefaultMessage());
 			}
-			model.addAttribute("errorMap",errorMap);
 			return Script.back(errorMap.toString());
 		}
 		
@@ -81,7 +80,7 @@ public class UserController {
 		
 	}
 	@PostMapping("/join")
-	public @ResponseBody String join(@Valid JoinReqDto dto, BindingResult bindingResult , Model model) {
+	public @ResponseBody String join(@Valid JoinReqDto dto, BindingResult bindingResult ) {
 	
 		
 		// 1.유효성 검사 실패 - Java Script response(alert->back)
@@ -95,7 +94,6 @@ public class UserController {
 				System.out.println("필드:" + error.getField());
 				System.out.println("메시지:" + error.getDefaultMessage());
 			}
-			model.addAttribute("errorMap",errorMap);
 			return Script.back(errorMap.toString());
 		}
 		
