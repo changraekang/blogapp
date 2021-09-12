@@ -16,7 +16,7 @@
 		<br />
 		<!-- 카드 글 끝 -->
 	</c:forEach>
-	<div class="d-flex justify-content-center">
+	<div class="pagination  d-flex justify-content-center">
       <ul class="pagination">
          <li class="page-item disabled"><a class="page-link" href="#">Prev</a></li>
          <li class="page-item"><a class="page-link" href="#">Next</a></li>

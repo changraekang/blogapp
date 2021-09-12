@@ -24,7 +24,7 @@ public class User {
 	private int		id;			//PK Primary Key (자동증가번호)
 	@Column(nullable = false, length = 60, unique = true)
 	private String 	username; 	// 아이디
-	@Column(nullable = false, length = 20)
+	@Column(nullable = false, length = 70)
 	private String	password;
 	@Column(nullable = false, length = 50)
 	private String 	email;
