@@ -30,6 +30,14 @@ public class UserController {
 	private final HttpSession session;
 	
 	
+	@GetMapping("/logout")
+	public String logout() {
+		
+		session.invalidate();
+		return "redirect:/"; // 게시글 목록화면에 data 가 없다 (model에서 data를 안가져왔기 때문)
+	}
+	
+	
 	@GetMapping("/loginForm")
 	public String loginForm() {
 		return "user/loginForm";
