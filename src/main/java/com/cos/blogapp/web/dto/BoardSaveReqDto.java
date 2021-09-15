@@ -27,9 +27,9 @@ public class BoardSaveReqDto {
 		
 		Board board = new Board();
 		board.setTitle(title);
-		board.setContent(content);
+		board.setContent(content.replaceAll("<p>|</p>", ""));
 		board.setUser(principal);
-		
+	
 		return board;
 	}
 

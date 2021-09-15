@@ -10,12 +10,18 @@
 	    <input type="text" name="title" class="form-control" placeholder="Enter title" required="required" >
 	  </div>
 	  <div class="form-group">
-	    <textarea class="form-control" rows="5" name="content"></textarea>
+	    <textarea id= "summernote" class="form-control" rows="5" name="content"></textarea>
 	  </div>
 		<button type="submit" class="btn btn-primary">글쓰기</button>
 	</form>
 </div>
-
+ <script>
+        $('#summernote').summernote({
+            placeholder: '게시글을 입력해주세요',
+            tabsize: 2,
+            height: 500
+          });
+  </script>
 
 
 

@@ -98,4 +98,8 @@ public class UserController {
 		userRepository.save(dto.toEntity());
 		return Script.href("/loginForm"); // 리다이렉션 (300)
 	}
+	
+	
+	
+	
 }

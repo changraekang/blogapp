@@ -70,8 +70,13 @@
 				<artifactId>jstl</artifactId>
 				<version>1.2</version>
 			</dependency>
-						
-				
+			<!-- 유튜브 재생 library  -->
+			<dependency>
+					<groupId>org.jsoup</groupId> 
+					<artifactId>jsoup</artifactId>
+					<version>1.10.3</version>
+			</dependency>
+	
 	</dependencies>
 
 
