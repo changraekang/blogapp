@@ -56,13 +56,7 @@ public class BoardController {
 			
 			
 			Board boardEntity = boardRepository.findById(id)
-					.orElseThrow(new Supplier<MyNotFoundException>() {
-
-						@Override
-						public MyNotFoundException get() {
-							return new MyNotFoundException(id + "를 찾을 수 없습니다" );
-						}
-					});
+					.orElseThrow( () -> new MyNotFoundException ( id + "를 못 찾았어요"));
 			
 			
 			
