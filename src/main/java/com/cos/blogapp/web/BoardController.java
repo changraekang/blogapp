@@ -2,10 +2,10 @@ package com.cos.blogapp.web;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cos.blogapp.domain.board.Board;
 import com.cos.blogapp.domain.board.BoardRepository;
 import com.cos.blogapp.domain.user.User;
+import com.cos.blogapp.handler.ex.MyNotFoundException;
 import com.cos.blogapp.util.Script;
 import com.cos.blogapp.web.dto.BoardSaveReqDto;
 
@@ -55,7 +56,13 @@ public class BoardController {
 			
 			
 			Board boardEntity = boardRepository.findById(id)
-					.orElseThrow();
+					.orElseThrow(new Supplier<MyNotFoundException>() {
+
+						@Override
+						public MyNotFoundException get() {
+							return new MyNotFoundException(id + "를 찾을 수 없습니다" );
+						}
+					});
 			
 			
 			
