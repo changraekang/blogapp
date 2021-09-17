@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -47,7 +48,7 @@ public class UserController {
 	public String joinForm() {
 		return "user/joinForm";
 	}
-	
+	// 로그인
 	@PostMapping("/login")
 	public @ResponseBody String login(@Valid LoginReqDto dto, BindingResult bindingResult) {
 		
@@ -74,7 +75,7 @@ public class UserController {
 		}
 
 		
-		
+	//회원가입	
 	@PostMapping("/join")
 	public @ResponseBody String join(@Valid JoinReqDto dto, BindingResult bindingResult ) {
 	
@@ -98,6 +99,18 @@ public class UserController {
 		userRepository.save(dto.toEntity());
 		return Script.href("/loginForm"); // 리다이렉션 (300)
 	}
+	
+	// 회원정보 확인
+	@GetMapping("/user/{id}")
+	public String userinfo( @PathVariable int id ) {
+		// 기본은 userRepository.findById(id) -> DB에서 가져와야 함
+		// 우회적으로 session value 를 가져올 수 있다
+		// Validation 체크 불필요 자신의 session 만 가져오기 때문
+		
+		
+		return "user/updateForm";
+	}
+	
 	
 	
 	

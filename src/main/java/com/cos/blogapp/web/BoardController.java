@@ -34,7 +34,7 @@ public class BoardController {
 		// DI
 		private final BoardRepository boardRepository;
 		private final HttpSession session;
-
+		//RestFul API 주소설계방식
 		/*   
 		  1. Controller 선정 
 		  2. http Method 선정
