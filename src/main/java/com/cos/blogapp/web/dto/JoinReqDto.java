@@ -35,4 +35,15 @@ public class JoinReqDto {
 		
 		return user;
 	}
+	public User toEntity( User principal) {
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setEmail(email);
+		
+		
+		return user;
+	}
+
+	
 }

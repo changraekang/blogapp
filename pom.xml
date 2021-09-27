@@ -40,6 +40,12 @@
 			<artifactId>tomcat-jasper</artifactId>
 			<version>9.0.52</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -64,12 +70,6 @@
 				<version>2.5.4</version>
 			</dependency>
 			
-			<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>jstl</artifactId>
-				<version>1.2</version>
-			</dependency>
 			<!-- 유튜브 재생 library  -->
 			<dependency>
 					<groupId>org.jsoup</groupId> 

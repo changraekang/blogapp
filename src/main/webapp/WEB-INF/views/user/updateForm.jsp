@@ -5,15 +5,15 @@
 <%@ include file="../layout/header.jsp" %>
 
 <div class="container">
-	<form >
+	<form onsubmit="update(event,${sessionScope.principal.id})">
 	  <div class="form-group">
-	    <input type="text" value="${sessionScope.principal.username }" class="form-control" placeholder="Enter username" readonly="readonly" maxlength="20">
+	    <input type="text" id= "username" value="${sessionScope.principal.username }" class="form-control" placeholder="Enter username" readonly="readonly" maxlength="20">
 	  </div>
 	  <div class="form-group">
-	    <input type="password" value="${sessionScope.principal.password }"  class="form-control" placeholder="Enter password" required="required" maxlength="20">
+	    <input type="password" id= "password" value="${sessionScope.principal.password }"  class="form-control" placeholder="Enter password" required="required" maxlength="20">
 	  </div>
 		<div class="form-group">
-			<input type="email" value="${sessionScope.principal.email }"  class="form-control" placeholder="Enter email" >
+			<input type="email" id= "email"  value="${sessionScope.principal.email }"  class="form-control" placeholder="Enter email" >
 		</div>
 		<button type="submit" class="btn btn-primary">회원정보 수정</button>
 	</form>
@@ -22,7 +22,51 @@
 		 put 은 JavaScript를 통해 처리-->
 	
 </div>
+ <script>
+ 	
+ 		async function update(event,id){
+ 			//console.log(event);
+	 		event.preventDefault();
+	 	   // 주소 : PUT board/3
+	       // UPDATE board SET title = ?, content = ? WHERE id = ?
 
+ 			let userUpdateDto = {
+ 				username: document.querySelector("#username").value,
+ 				password: document.querySelector("#password").value,
+ 				email: document.querySelector("#email").value
+ 			};
+ 			console.log(userUpdateDto);
+ 			console.log(JSON.stringify(userUpdateDto));
+ 			
+ 			// JSON.stringify( javascript Object) -> return: json 문자열
+ 			// JSON.parse (jason 문자열) -> return: javascript 함수
+ 			
+ 			
+ 			let response = await fetch("http://localhost:8080/user/"+id, {
+ 				method: "put",
+ 				body: JSON.stringify(userUpdateDto),
+ 				headers:{
+ 					"Content-Type" : "application/json; charset=utf-8" 					
+ 				}
+ 			} );
+ 			
+ 		
+ 			let parseResponse = await response.json(); // 나중에 Spring Method에서 return 될 때 return 값이 무엇인지 확인!
+ 			// response.text()로 변경하여 확인
+ 			console.log(parseResponse);
+ 			  if(parseResponse.code == 1){
+ 	                alert("업데이트 성공");
+ 	                location.href = "/" ;
+ 	             }else{
+ 	  	    	  alert(parseResponse.msg);
+ 	             }
+
+			 			
+ 		}
+ 
+ 
+  
+  </script>
 
 
 
