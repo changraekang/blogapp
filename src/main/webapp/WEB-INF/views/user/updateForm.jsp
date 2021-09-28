@@ -7,7 +7,7 @@
 <div class="container">
 	<form onsubmit="update(event,${sessionScope.principal.id})">
 	  <div class="form-group">
-	    <input type="text" id= "username" value="${sessionScope.principal.username }" class="form-control" placeholder="Enter username" readonly="readonly" maxlength="20">
+	    <input type="text" value="${sessionScope.principal.username }" class="form-control" placeholder="Enter username" readonly="readonly" maxlength="20">
 	  </div>
 		<div class="form-group">
 			<input type="email" id= "email"  value="${sessionScope.principal.email }"  class="form-control" placeholder="Enter email" >
@@ -28,7 +28,6 @@
 	       // UPDATE board SET title = ?, content = ? WHERE id = ?
 
  			let userUpdateDto = {
- 				username: document.querySelector("#username").value,
  				email: document.querySelector("#email").value
  			};
  			console.log(userUpdateDto);

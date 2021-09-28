@@ -25,7 +25,7 @@ import com.cos.blogapp.util.Script;
 import com.cos.blogapp.web.dto.CMRespDto;
 import com.cos.blogapp.web.dto.JoinReqDto;
 import com.cos.blogapp.web.dto.LoginReqDto;
-import com.cos.blogapp.web.dto.UpdateReqDto;
+import com.cos.blogapp.web.dto.UserUpdateDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -109,7 +109,7 @@ public class UserController {
 
 	// 회원정보 수정
 	@PutMapping("user/{id}")
-	public @ResponseBody CMRespDto<String> userUpdate(@PathVariable int id, @RequestBody @Valid UpdateReqDto dto,
+	public @ResponseBody CMRespDto<String> userUpdate(@PathVariable int id, @RequestBody @Valid UserUpdateDto dto,
 			BindingResult bindingResult) {
 		
 		
