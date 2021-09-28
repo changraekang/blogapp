@@ -25,6 +25,7 @@ import com.cos.blogapp.util.Script;
 import com.cos.blogapp.web.dto.CMRespDto;
 import com.cos.blogapp.web.dto.JoinReqDto;
 import com.cos.blogapp.web.dto.LoginReqDto;
+import com.cos.blogapp.web.dto.UpdateReqDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -108,8 +109,25 @@ public class UserController {
 
 	// 회원정보 수정
 	@PutMapping("user/{id}")
-	public @ResponseBody CMRespDto<String> userUpdate(@PathVariable int id, @RequestBody JoinReqDto dto,
+	public @ResponseBody CMRespDto<String> userUpdate(@PathVariable int id, @RequestBody @Valid UpdateReqDto dto,
 			BindingResult bindingResult) {
+		
+		
+		
+		
+		 
+		
+		if (bindingResult.hasErrors()) {
+			Map<String, String> errorMap = new HashMap<>();
+			for (FieldError error : bindingResult.getFieldErrors()) {
+				errorMap.put(error.getField(), error.getDefaultMessage());
+				System.out.println("필드:" + error.getField());
+				System.out.println("메시지:" + error.getDefaultMessage());
+			}
+			return new CMRespDto<>(-1, "업데이트 실패", null);
+		}
+		 
+		
 		// 인증이 된 사람만 함수 접근 가능!! (로그인 된 사람)
 		User principal = (User) session.getAttribute("principal");
 		if (principal == null) {
@@ -123,27 +141,12 @@ public class UserController {
 			throw new MyAPINotFoundException("해당글을 수정할 권한이 없습니다.");
 		}
 		
-		System.out.println("원래" + principal.getPassword());
-		System.out.println("입력dto" +dto.getPassword() );
-		System.out.println("입력user" + userEntity.getPassword());
+		// 핵심로직
 		
-		try {
-			User user = dto.toEntity(principal);
-			user.setId(id);
-			
-			if (principal.getPassword() != dto.getPassword() ) {
-				
-				String encPassword = SHA.encrypt(dto.getPassword(), MyAlgorithm.SHA256);
-				user.setPassword(encPassword);
-			}
-			user.setPassword(dto.getPassword());
-			System.out.println(user.toString());
-			userRepository.save(user);
-
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
+		principal.setEmail(dto.getEmail());
+		session.setAttribute("principal", principal);
+		
+		userRepository.save(principal);
 		
 		
 		return new CMRespDto<>(1, "업데이트 성공", null);

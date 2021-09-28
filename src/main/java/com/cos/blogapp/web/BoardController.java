@@ -49,10 +49,18 @@ public class BoardController {
 			throw new MyAPINotFoundException("인증이 되지 않습니다");
 		}
 
-		// 권한이 있는 사람만 함수 접근 가능(principal.id == {id})
-		Board boardEntity = boardRepository.findById(id)
-				.orElseThrow(() -> new MyAPINotFoundException("해당글을 찾을 수 없습니다"));
 		// 유효성 검사
+		  if (bindingResult.hasErrors()) {
+		         Map<String, String> errorMap = new HashMap<>();
+		         for (FieldError error : bindingResult.getFieldErrors()) {
+		            errorMap.put(error.getField(), error.getDefaultMessage());
+		         }
+		         throw new MyAPINotFoundException(errorMap.toString());
+		      }
+
+		  // 권한이 있는 사람만 함수 접근 가능(principal.id == {id})
+		  Board boardEntity = boardRepository.findById(id)
+				  .orElseThrow(() -> new MyAPINotFoundException("해당글을 찾을 수 없습니다"));
 		if (principal.getId() != boardEntity.getUser().getId()) {
 			throw new MyAPINotFoundException("해당글을 수정할 권한이 없습니다.");
 		}

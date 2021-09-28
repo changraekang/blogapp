@@ -1,6 +1,6 @@
 package com.cos.blogapp.web;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test; 
 
 import com.cos.blogapp.domain.board.Board;
 
