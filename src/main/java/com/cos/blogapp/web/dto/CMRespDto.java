@@ -1,7 +1,7 @@
 package com.cos.blogapp.web.dto;
 
 
-import com.cos.blogapp.domain.user.User;
+import com.cos.blogapp.domain.user.User; 
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

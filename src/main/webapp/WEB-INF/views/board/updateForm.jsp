@@ -45,7 +45,8 @@
  			} );
  			
  		
- 			let parseResponse = await response.json(); // 나중에 Spring Method에서 return 될 때 return 값이 무엇인지 확인!
+ 			let parseResponse = await response.json(); 
+ 			// 나중에 Spring Method에서 return 될 때 return 값이 무엇인지 확인!
  			// response.text()로 변경하여 확인
  			console.log(parseResponse);
  			  if(parseResponse.code == 1){
