@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cos.blogapp.domain.user.User;
 import com.cos.blogapp.domain.user.UserRepository;
 import com.cos.blogapp.handler.ex.MyAPINotFoundException;
+import com.cos.blogapp.service.UserService;
 import com.cos.blogapp.util.MyAlgorithm;
 import com.cos.blogapp.util.SHA;
 import com.cos.blogapp.util.Script;
@@ -34,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	private final UserRepository userRepository;
 	private final HttpSession session;
-
+	private final UserService userService;
 	@GetMapping("/logout")
 	public String logout() {
 
@@ -64,7 +65,8 @@ public class UserController {
 			return Script.back(errorMap.toString());
 		}
 
-		User userEntity = userRepository.mLogin(dto.getUsername(), SHA.encrypt(dto.getPassword(), MyAlgorithm.SHA256));
+		
+		User userEntity = userService.로그인(dto);
 		if (userEntity == null) { // username, password 잘못 기입
 			return Script.back("아이디 혹은 비밀번호를 잘못 입력하였습니다.");
 		} else {
@@ -90,10 +92,7 @@ public class UserController {
 			}
 			return Script.back(errorMap.toString());
 		}
-		String encPassword = SHA.encrypt(dto.getPassword(), MyAlgorithm.SHA256);
-
-		dto.setPassword(encPassword);
-		userRepository.save(dto.toEntity());
+	
 		return Script.href("/loginForm"); // 리다이렉션 (300)
 	}
 
@@ -112,11 +111,6 @@ public class UserController {
 	public @ResponseBody CMRespDto<String> userUpdate(@PathVariable int id, @RequestBody @Valid UserUpdateDto dto,
 			BindingResult bindingResult) {
 		
-		
-		
-		
-		 
-		
 		if (bindingResult.hasErrors()) {
 			Map<String, String> errorMap = new HashMap<>();
 			for (FieldError error : bindingResult.getFieldErrors()) {
@@ -126,29 +120,17 @@ public class UserController {
 			}
 			return new CMRespDto<>(-1, "업데이트 실패", null);
 		}
-		 
-		
+
 		// 인증이 된 사람만 함수 접근 가능!! (로그인 된 사람)
 		User principal = (User) session.getAttribute("principal");
 		if (principal == null) {
 			throw new MyAPINotFoundException("인증이 되지 않습니다");
 		}
 		
-		User userEntity = userRepository.findById(id)
-				.orElseThrow(()-> new MyAPINotFoundException("해당회원을 찾을 수 없습니다"));
+	
+		session.setAttribute("principal", principal);	
 		
-		if (principal.getId() != userEntity.getId()) {
-			throw new MyAPINotFoundException("해당글을 수정할 권한이 없습니다.");
-		}
-		
-		// 핵심로직
-		
-		principal.setEmail(dto.getEmail());
-		session.setAttribute("principal", principal);
-		
-		userRepository.save(principal);
-		
-		
+		userService.회원정보수정(principal, id, dto);
 		return new CMRespDto<>(1, "업데이트 성공", null);
 	}
 

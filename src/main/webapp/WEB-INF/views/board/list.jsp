@@ -7,8 +7,8 @@
 
 <div class="container">
 
-	<!-- var은 pageScope -->
 	<c:forEach var="board" items="${boardsEntity.content}">
+	<!-- var은 pageScope -->
 		<!-- 카드 글 시작 -->
 		<div class="card">
 			<div class="card-body">
