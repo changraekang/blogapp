@@ -33,7 +33,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Controller
 public class UserController {
-	private final UserRepository userRepository;
 	private final HttpSession session;
 	private final UserService userService;
 	@GetMapping("/logout")
@@ -128,9 +127,9 @@ public class UserController {
 		}
 		
 	
-		session.setAttribute("principal", principal);	
 		
 		userService.회원정보수정(principal, id, dto);
+		session.setAttribute("principal", principal);	
 		return new CMRespDto<>(1, "업데이트 성공", null);
 	}
 

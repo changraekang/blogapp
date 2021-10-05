@@ -43,8 +43,6 @@ import lombok.val;
 @Controller
 public class BoardController {
 	// DI
-	private final BoardRepository boardRepository;
-	private final CommentRepository commentRepository;
 	private final BoardService boardService;
 	private final HttpSession session;
 
@@ -58,23 +56,15 @@ public class BoardController {
 		return "redirect:/board/" + boardid;
 	}
 
-	@GetMapping("/board/{boardid}/comment")
-	public String commentList(Model model, @PathVariable int boardid) {
-		System.out.println("오류1");
 
-		List<Comment> commentsEntity = (List<Comment>) commentRepository.findAll();
-
-		model.addAttribute("commentsEntity", commentsEntity);
-
-		System.out.println("모델" + model.toString());
-		return "/board/comment";
-	}
 
 	// 글 수정
 	@PutMapping("/board/{id}")
 	public @ResponseBody CMRespDto<String> update(@PathVariable int id, @RequestBody BoardSaveReqDto dto,
 			BindingResult bindingResult) {
 		// 인증이 된 사람만 함수 접근 가능!! (로그인 된 사람)
+		
+		// 공통로직 시작
 		User principal = (User) session.getAttribute("principal");
 		if (principal == null) {
 			throw new MyAPINotFoundException("인증이 되지 않습니다");
@@ -87,7 +77,7 @@ public class BoardController {
 			}
 			throw new MyAPINotFoundException(errorMap.toString());
 		}
-		
+		// 공통로직 끝
 		
 		
 		
@@ -101,8 +91,8 @@ public class BoardController {
 	@GetMapping("/board/{id}/updateForm")
 	public String updateForm(@PathVariable int id, Model model) {
 		
-		Board boardEntity = boardService.게시글수정이동(id);
-		model.addAttribute("boardEntity", boardEntity);
+		 
+		model.addAttribute("boardEntity", boardService.게시글수정이동(id));
 		return "board/updateForm";
 	}
 
@@ -141,7 +131,8 @@ public class BoardController {
 	
 		// Comment commentsEntity = commentRepository.getComment(id);
 		// model.addAttribute("commentsEntity",commentsEntity);
-		boardService.게시글상세보기이동(id, model);
+		
+		model.addAttribute("boardEntity",  boardService.게시글상세보기이동(id));
 		return "board/detail";
 	}
 
@@ -154,8 +145,8 @@ public class BoardController {
 	@GetMapping("/board")
 	public String home(Model model, int page) {
 
-		Page<Board> boardsEntity = boardService.게시글목록조회(page);
-		model.addAttribute("boardsEntity", boardsEntity);
+	
+		model.addAttribute("boardsEntity",  boardService.게시글목록조회(page));
 		return "board/list";
 
 	}

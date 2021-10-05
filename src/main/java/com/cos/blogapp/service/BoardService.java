@@ -68,8 +68,10 @@ public class BoardService {
 
 		return boardEntity;
 	}
-
-	@Transactional
+	// Transactional = 트랜잭션 시작
+	// rollbackFor ( 함수내부에 하나의 write라도 실패하면 전체를 rollback 하는 것)
+	// 주의 RuntimeException을 던져야 동작한다
+	@Transactional(rollbackFor = MyAPINotFoundException.class)
 	public void 게시글삭제(int id, User principal) {
 		// 권한이 있는 사람만 함수 접근 가능(principal.id == {id})
 		Board boardEntity = boardRepository.findById(id)
@@ -87,9 +89,9 @@ public class BoardService {
 		}
 	}
 
-	public void 게시글상세보기이동(int id, Model model) {
+	public Board 게시글상세보기이동(int id) {
 		Board boardEntity = boardRepository.findById(id).orElseThrow(() -> new MyNotFoundException(id + "를 못 찾았어요"));
-		model.addAttribute("boardEntity", boardEntity);
+		return boardEntity;
 	}
 	
 	
