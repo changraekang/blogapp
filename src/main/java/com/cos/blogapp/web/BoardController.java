@@ -52,10 +52,9 @@ public class BoardController {
 		User principal = (User) session.getAttribute("principal");
 
 		boardService.댓글등록(boardid, dto, principal);
-
+		System.out.println( "보드" + boardid);
 		return "redirect:/board/" + boardid;
 	}
-
 
 
 	// 글 수정
@@ -110,6 +109,19 @@ public class BoardController {
 
 		return new CMRespDto<String>(1, "성공", null);
 	}
+	@DeleteMapping("/board/{boardid}/comment")
+	public @ResponseBody CMRespDto<String> commentdeleteById(@PathVariable int boardid) {
+		
+		// 인증이 된 사람만 함수 접근 가능!! (로그인 된 사람)
+		User principal = (User) session.getAttribute("principal");
+		if (principal == null) {
+			throw new MyAPINotFoundException("인증이 되지 않습니다");
+		}
+		
+		boardService.댓글삭제(boardid, principal);
+		
+		return new CMRespDto<String>(1, "성공", null);
+	}
 
 	// RestFul API 주소설계방식
 	/*
@@ -149,6 +161,13 @@ public class BoardController {
 		model.addAttribute("boardsEntity",  boardService.게시글목록조회(page));
 		return "board/list";
 
+	}
+
+	@GetMapping("/comment")
+	public String commentlist(Model model, int page) {
+		
+	//model.addAttribute("commentsEntity",  boardService.댓글목록조회(page));
+		return "board/list";
 	}
 
 	@PostMapping("/board")

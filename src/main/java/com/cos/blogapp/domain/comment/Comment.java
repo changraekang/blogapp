@@ -38,6 +38,7 @@ public class Comment {
 	@JoinColumn(name = "boardId")
 	@ManyToOne(fetch = FetchType.EAGER) 
 	private Board board;
+
 	
 	
 	

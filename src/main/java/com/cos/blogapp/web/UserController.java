@@ -65,12 +65,11 @@ public class UserController {
 		}
 
 		
-		User userEntity = userService.로그인(dto);
-		if (userEntity == null) { // username, password 잘못 기입
+		if (userService.로그인(dto) == null) { // username, password 잘못 기입
 			return Script.back("아이디 혹은 비밀번호를 잘못 입력하였습니다.");
 		} else {
 			// 세션 날라가는 조건 : 1. session.invalidate(), 2. 브라우저를 닫으면 날라감
-			session.setAttribute("principal", userEntity);
+			session.setAttribute("principal", userService.로그인(dto));
 			return Script.href("/", "로그인 성공");
 		}
 	}
@@ -81,7 +80,7 @@ public class UserController {
 
 		// 1.유효성 검사 실패 - Java Script response(alert->back)
 		// 2.정상 - login page
-
+		userService.회원가입(dto);
 		if (bindingResult.hasErrors()) {
 			Map<String, String> errorMap = new HashMap<>();
 			for (FieldError error : bindingResult.getFieldErrors()) {
@@ -101,7 +100,7 @@ public class UserController {
 		// 기본은 userRepository.findById(id) -> DB에서 가져와야 함
 		// 우회적으로 session value 를 가져올 수 있다
 		// Validation 체크 불필요 자신의 session 만 가져오기 때문
-
+		
 		return "user/updateForm";
 	}
 

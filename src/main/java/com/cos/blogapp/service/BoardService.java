@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 
 import com.cos.blogapp.domain.board.Board;
 import com.cos.blogapp.domain.board.BoardRepository;
+import com.cos.blogapp.domain.comment.Comment;
 import com.cos.blogapp.domain.comment.CommentRepository;
 import com.cos.blogapp.domain.user.User;
 import com.cos.blogapp.handler.ex.MyAPINotFoundException;
@@ -88,6 +89,23 @@ public class BoardService {
 			throw new MyAPINotFoundException(id + "번 게시글을 찾을 수 없어 삭제할 수 없습니다");
 		}
 	}
+	@Transactional(rollbackFor = MyAPINotFoundException.class)
+	public void 댓글삭제 (int id, User principal) {
+		// 권한이 있는 사람만 함수 접근 가능(principal.id == {id})
+		Comment commentEntity = commentRepository.findById(id)
+				.orElseThrow(() -> new MyAPINotFoundException("해당글을 찾을 수 없습니다"));
+		
+		if (principal.getId() != commentEntity.getUser().getId()) {
+			throw new MyAPINotFoundException("해당글을 삭제할 권한이 없습니다.");
+		}
+		
+		try {
+			
+			commentRepository.deleteById(id); // error -> id가 없으면
+		} catch (Exception e) {
+			throw new MyAPINotFoundException(id + "번 게시글을 찾을 수 없어 삭제할 수 없습니다");
+		}
+	}
 
 	public Board 게시글상세보기이동(int id) {
 		Board boardEntity = boardRepository.findById(id).orElseThrow(() -> new MyNotFoundException(id + "를 못 찾았어요"));
@@ -108,6 +126,13 @@ public class BoardService {
 		Page<Board> boardsEntity = boardRepository.findAll(pageRequest);
 
 		return boardsEntity;
+	}
+	public Page<Comment> 댓글목록조회(int page) {
+		PageRequest pageRequest = PageRequest.of(page, 3, Sort.by(Sort.Direction.DESC, "id"));
+		
+		Page<Comment> commentsEntity = (Page<Comment>) commentRepository.findAll();
+		
+		return commentsEntity;
 	}
 
 }
