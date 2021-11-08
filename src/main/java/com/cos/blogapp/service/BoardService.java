@@ -1,6 +1,6 @@
 package com.cos.blogapp.service;
 
-import java.util.HashMap;
+import java.util.HashMap; 
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -31,15 +31,7 @@ public class BoardService {
 	private final BoardRepository boardRepository;
 	private final CommentRepository commentRepository;
 
-	@Transactional
-	public void 댓글등록(int boardid, CommentSaveReqDto dto, User principal) {
-
-		Board boardEntity = boardRepository.findById(boardid)
-				.orElseThrow(() -> new MyNotFoundException(boardid + "번의 게시글을 찾을 수 없습니다."));
-
-		commentRepository.save(dto.toEntity(principal, boardEntity));
-
-	} // @Transactional 종료
+	
 
 	@Transactional
 	public void 게시글수정(int id, User principal, BoardSaveReqDto dto) {
@@ -89,23 +81,7 @@ public class BoardService {
 			throw new MyAPINotFoundException(id + "번 게시글을 찾을 수 없어 삭제할 수 없습니다");
 		}
 	}
-	@Transactional(rollbackFor = MyAPINotFoundException.class)
-	public void 댓글삭제 (int id, User principal) {
-		// 권한이 있는 사람만 함수 접근 가능(principal.id == {id})
-		Comment commentEntity = commentRepository.findById(id)
-				.orElseThrow(() -> new MyAPINotFoundException("해당글을 찾을 수 없습니다"));
-		
-		if (principal.getId() != commentEntity.getUser().getId()) {
-			throw new MyAPINotFoundException("해당글을 삭제할 권한이 없습니다.");
-		}
-		
-		try {
-			
-			commentRepository.deleteById(id); // error -> id가 없으면
-		} catch (Exception e) {
-			throw new MyAPINotFoundException(id + "번 게시글을 찾을 수 없어 삭제할 수 없습니다");
-		}
-	}
+	
 
 	public Board 게시글상세보기이동(int id) {
 		Board boardEntity = boardRepository.findById(id).orElseThrow(() -> new MyNotFoundException(id + "를 못 찾았어요"));
@@ -124,7 +100,7 @@ public class BoardService {
 		PageRequest pageRequest = PageRequest.of(page, 3, Sort.by(Sort.Direction.DESC, "id"));
 
 		Page<Board> boardsEntity = boardRepository.findAll(pageRequest);
-
+		System.out.println(boardsEntity + "보즈엔티티");
 		return boardsEntity;
 	}
 	public Page<Comment> 댓글목록조회(int page) {

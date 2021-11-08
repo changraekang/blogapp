@@ -1,6 +1,6 @@
 package com.cos.blogapp.service;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Service; 
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cos.blogapp.domain.user.User;
@@ -26,7 +26,7 @@ public class UserService {
 	@Transactional
 	public void 회원가입(JoinReqDto dto) {
 		String encPassword = SHA.encrypt(dto.getPassword(), MyAlgorithm.SHA256);
-
+		
 		dto.setPassword(encPassword);
 		userRepository.save(dto.toEntity());
 	}

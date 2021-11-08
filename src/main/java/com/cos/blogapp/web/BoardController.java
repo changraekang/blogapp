@@ -1,6 +1,6 @@
 package com.cos.blogapp.web;
 
-import java.util.HashMap;
+import java.util.HashMap; 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,6 +31,7 @@ import com.cos.blogapp.domain.user.User;
 import com.cos.blogapp.handler.ex.MyAPINotFoundException;
 import com.cos.blogapp.handler.ex.MyNotFoundException;
 import com.cos.blogapp.service.BoardService;
+import com.cos.blogapp.service.CommentService;
 import com.cos.blogapp.util.Script;
 import com.cos.blogapp.web.dto.BoardSaveReqDto;
 import com.cos.blogapp.web.dto.CMRespDto;
@@ -44,21 +45,27 @@ import lombok.val;
 public class BoardController {
 	// DI
 	private final BoardService boardService;
+	private final CommentService commentService;	
 	private final HttpSession session;
 
 	// 댓글
-	@PostMapping("/board/{boardid}/comment")
+	@PostMapping("/api/board/{boardid}/comment")
 	public String commentSave(@PathVariable int boardid, @Valid CommentSaveReqDto dto) {
 		User principal = (User) session.getAttribute("principal");
-
-		boardService.댓글등록(boardid, dto, principal);
-		System.out.println( "보드" + boardid);
+		
+		System.out.println("댓글"+principal);
+		if (principal == null ) {
+			throw new MyNotFoundException("인증이 되지 않습니다.");
+			
+		}
+		
+		commentService.댓글등록(boardid, dto, principal);
 		return "redirect:/board/" + boardid;
 	}
 
 
 	// 글 수정
-	@PutMapping("/board/{id}")
+	@PutMapping("/api/board/{id}")
 	public @ResponseBody CMRespDto<String> update(@PathVariable int id, @RequestBody BoardSaveReqDto dto,
 			BindingResult bindingResult) {
 		// 인증이 된 사람만 함수 접근 가능!! (로그인 된 사람)
@@ -96,7 +103,7 @@ public class BoardController {
 	}
 
 	// API(AJAX) 요청
-	@DeleteMapping("/board/{id}")
+	@DeleteMapping("/api/board/{id}")
 	public @ResponseBody CMRespDto<String> deleteById(@PathVariable int id) {
 
 		// 인증이 된 사람만 함수 접근 가능!! (로그인 된 사람)
@@ -109,19 +116,7 @@ public class BoardController {
 
 		return new CMRespDto<String>(1, "성공", null);
 	}
-	@DeleteMapping("/board/{boardid}/comment")
-	public @ResponseBody CMRespDto<String> commentdeleteById(@PathVariable int boardid) {
-		
-		// 인증이 된 사람만 함수 접근 가능!! (로그인 된 사람)
-		User principal = (User) session.getAttribute("principal");
-		if (principal == null) {
-			throw new MyAPINotFoundException("인증이 되지 않습니다");
-		}
-		
-		boardService.댓글삭제(boardid, principal);
-		
-		return new CMRespDto<String>(1, "성공", null);
-	}
+	
 
 	// RestFul API 주소설계방식
 	/*
@@ -157,20 +152,15 @@ public class BoardController {
 	@GetMapping("/board")
 	public String home(Model model, int page) {
 
-	
-		model.addAttribute("boardsEntity",  boardService.게시글목록조회(page));
-		return "board/list";
-
-	}
-
-	@GetMapping("/comment")
-	public String commentlist(Model model, int page) {
 		
-	//model.addAttribute("commentsEntity",  boardService.댓글목록조회(page));
+		model.addAttribute("boardsEntity",  boardService.게시글목록조회(page));
+		
 		return "board/list";
+
 	}
 
-	@PostMapping("/board")
+	// 글쓰기
+	@PostMapping("/api/board") 
 	public @ResponseBody String save(@Valid BoardSaveReqDto dto, BindingResult bindingResult) {
 		User principal = (User) session.getAttribute("principal");
 

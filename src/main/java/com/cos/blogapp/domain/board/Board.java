@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 import org.springframework.data.jpa.repository.Query;
 
@@ -44,6 +45,7 @@ public class Board {
 	// 양방향 Mapping 
 	@JsonIgnoreProperties({"board"})
 	@OneToMany(mappedBy = "board",fetch = FetchType.LAZY)
+	@OrderBy("id desc")
 	private List<Comment> comments;
 
 

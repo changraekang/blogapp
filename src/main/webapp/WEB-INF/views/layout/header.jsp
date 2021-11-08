@@ -20,9 +20,14 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-
 </head>
 <body>
+	
+	<script >
+		// javascript 에서 변형이 불가
+		// console 에서 변경하는 것을 막을 수 없다
+		let globalUserId = "${sessionScope.principal.id}";
+	</script>
 
 	<!-- 네브바 시작 -->
 	<nav class="navbar navbar-expand-md bg-dark navbar-dark">
@@ -46,7 +51,7 @@
 						<li class="nav-item"><a class="nav-link" href="/board/saveForm">글쓰기</a>
 						</li>
 
-						<li class="nav-item"><a class="nav-link" href="/user/${sessionScope.principal.id}">회원정보</a>
+						<li class="nav-item"><a class="nav-link" href="/api/user/${sessionScope.principal.id}">회원정보</a>
 						</li>
 
 						<li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a>

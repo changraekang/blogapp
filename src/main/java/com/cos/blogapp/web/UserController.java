@@ -35,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	private final HttpSession session;
 	private final UserService userService;
+	
 	@GetMapping("/logout")
 	public String logout() {
 
@@ -75,7 +76,7 @@ public class UserController {
 	}
 
 	// 회원가입
-	@PostMapping("/join")
+	@PostMapping("/api/join")
 	public @ResponseBody String join(@Valid JoinReqDto dto, BindingResult bindingResult) {
 
 		// 1.유효성 검사 실패 - Java Script response(alert->back)
@@ -105,7 +106,7 @@ public class UserController {
 	}
 
 	// 회원정보 수정
-	@PutMapping("user/{id}")
+	@PutMapping("/api/user/{id}")
 	public @ResponseBody CMRespDto<String> userUpdate(@PathVariable int id, @RequestBody @Valid UserUpdateDto dto,
 			BindingResult bindingResult) {
 		

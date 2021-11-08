@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ include file="../layout/header.jsp"%>
-
+ 
 <div class="container">
 
 	<c:if test="${sessionScope.principal.id eq boardEntity.user.id}">
@@ -59,10 +59,9 @@
 
 	<div class="card">
 		<!--  댓글 쓰기 시작-->
-		<form action="/board/${boardEntity.id}/comment" method="post">
+		<form action="/board/${boardEntity.id}/comment" method="post"  >
 			<div class="card-body">
-				<textarea id="reply-content" class="form-control" name="content"
-					rows="1"></textarea>
+				<textarea id="tacontent" class="form-control" name="content" rows="1"></textarea>
 			</div>
 			<div class="card-footer">
 				<button type=submit id="btn-reply-save" class="btn btn-primary">등록</button>
@@ -70,6 +69,10 @@
 		</form>
 		<!--  댓글 쓰기 종료-->
 	</div>
+	<script>
+		$("#tacontent").click(()=>{			
+		});
+	</script>
 	<br />
 	<div class="card">
 		<div class="card-header">
@@ -84,13 +87,13 @@
 						<div class="font-italic">작성자 : ${comment.user.username}
 							&nbsp;</div>
 
-						<c:if test="${sessionScope.principal.id eq boardEntity.user.id}">
+						<c:if test="${sessionScope.principal.id eq comment.user.id}">
 							<button class="btn btn-danger"
 								onclick="commentdeleteById(${comment.id })">삭제</button>
 							<script>
-					     	async function commentdeleteById(boardid){
+					     	async function commentdeleteById(id){
 					    		// 1. 비동기 함수 호출 -> 비동기를 잘처리하는 방법  
-					     		let response = await fetch("http://localhost:8080/board/"+boardid + "/comment", {
+					     		let response = await fetch("http://localhost:8080/comment/" + id, {
 					    		  method: "delete"
 					    	  } ); // 약속 - 어음 (10초)
 					
@@ -114,7 +117,7 @@
 					      
 					      
 					      </script>
-										</c:if>
+						</c:if>
 					</div>
 				</li>
 			</ul>
